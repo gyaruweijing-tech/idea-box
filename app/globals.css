@@ -1,0 +1,372 @@
+/* ============================================================
+   Idea Box — 明るい付箋ボード風デザイン
+   クリーム地 + パステルカードで「妄想の宝箱」感を出す。
+   ============================================================ */
+
+:root {
+  --bg: #fff9e8; /* クリーム */
+  --ink: #4a3f2a; /* 濃い焦げ茶（真っ黒より柔らかい） */
+  --ink-soft: #8a7d63;
+  --accent: #ffb300; /* 山吹色 */
+  --accent-deep: #f57f17;
+  --card-radius: 18px;
+  --shadow: 0 4px 14px rgba(180, 140, 40, 0.16);
+  --shadow-hover: 0 8px 24px rgba(180, 140, 40, 0.26);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family:
+    'Hiragino Maru Gothic ProN', 'Hiragino Kaku Gothic ProN', 'Yu Gothic',
+    'Segoe UI', system-ui, sans-serif;
+  line-height: 1.6;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+input,
+textarea,
+select {
+  font-family: inherit;
+  color: var(--ink);
+}
+
+/* ---------- レイアウト ---------- */
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px 16px 80px;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 14px;
+  margin-bottom: 4px;
+}
+
+.header h1 {
+  font-size: 1.7rem;
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+
+.header .tagline {
+  color: var(--ink-soft);
+  font-size: 0.85rem;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin: 14px 0;
+}
+
+/* ---------- ボタン ---------- */
+
+.btn {
+  border: none;
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  background: #fff;
+  color: var(--ink);
+  box-shadow: var(--shadow);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+.btn.primary {
+  background: linear-gradient(135deg, #ffd54f, #ffb300);
+  color: #4a3200;
+}
+
+.btn.dig {
+  background: linear-gradient(135deg, #80deea, #4dd0e1);
+  color: #00424d;
+}
+
+.btn.ghost {
+  background: transparent;
+  box-shadow: none;
+  color: var(--ink-soft);
+  font-weight: 600;
+}
+
+.btn.ghost:hover {
+  transform: none;
+  color: var(--ink);
+}
+
+.btn.danger {
+  background: #ffcdd2;
+  color: #8e2430;
+}
+
+/* ---------- クイック追加 ---------- */
+
+.quick-add {
+  display: flex;
+  gap: 8px;
+  margin: 18px 0 10px;
+}
+
+.quick-add input {
+  flex: 1;
+  border: 2px solid #ffe082;
+  border-radius: 999px;
+  padding: 12px 20px;
+  font-size: 1rem;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.quick-add input:focus {
+  border-color: var(--accent);
+}
+
+/* ---------- フィルタ ---------- */
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  margin: 10px 0 20px;
+}
+
+.filters input[type='search'] {
+  border: 2px solid #ffe8a3;
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  background: #fff;
+  outline: none;
+}
+
+.chip {
+  border: none;
+  border-radius: 999px;
+  padding: 5px 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: #fff3cd;
+  color: #7a6420;
+  transition: transform 0.1s ease;
+}
+
+.chip:hover {
+  transform: scale(1.06);
+}
+
+.chip.on {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* ---------- カードグリッド ---------- */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 14px;
+}
+
+.card {
+  border: none;
+  border-radius: var(--card-radius);
+  padding: 16px 16px 12px;
+  text-align: left;
+  box-shadow: var(--shadow);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 120px;
+  color: var(--ink);
+}
+
+.card:hover {
+  transform: translateY(-3px) rotate(-0.4deg);
+  box-shadow: var(--shadow-hover);
+}
+
+/* パステル5色。カードごとに順繰りで塗る */
+.card.c0 { background: #fff59d; } /* レモン */
+.card.c1 { background: #ffccbc; } /* ピーチ */
+.card.c2 { background: #b3e5fc; } /* そら */
+.card.c3 { background: #c8e6c9; } /* わかば */
+.card.c4 { background: #e1bee7; } /* すみれ */
+
+.card .card-title {
+  font-weight: 700;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.card .card-body {
+  font-size: 0.82rem;
+  color: rgba(74, 63, 42, 0.75);
+  white-space: pre-wrap;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex: 1;
+}
+
+.card .card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  align-items: center;
+  font-size: 0.75rem;
+}
+
+.tag {
+  background: rgba(255, 255, 255, 0.65);
+  border-radius: 999px;
+  padding: 1px 9px;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.empty {
+  text-align: center;
+  color: var(--ink-soft);
+  padding: 60px 20px;
+  font-size: 0.95rem;
+}
+
+/* ---------- モーダル ---------- */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(90, 70, 20, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 10;
+}
+
+.modal {
+  background: #fffdf5;
+  border-radius: 22px;
+  box-shadow: 0 20px 60px rgba(90, 70, 20, 0.35);
+  width: 100%;
+  max-width: 640px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.modal h2 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.modal input[type='text'],
+.modal textarea {
+  width: 100%;
+  border: 2px solid #ffe8a3;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 0.95rem;
+  background: #fff;
+  outline: none;
+}
+
+.modal input[type='text']:focus,
+.modal textarea:focus {
+  border-color: var(--accent);
+}
+
+.modal textarea {
+  min-height: 160px;
+  resize: vertical;
+  line-height: 1.7;
+}
+
+.field-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+  margin-bottom: 4px;
+  display: block;
+}
+
+.seg {
+  display: inline-flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.modal-actions .right {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+/* ---------- 発掘モーダル ---------- */
+
+.dig-card {
+  border-radius: var(--card-radius);
+  padding: 22px;
+  box-shadow: var(--shadow);
+}
+
+.dig-card .md {
+  font-size: 0.9rem;
+}
+
+.md :first-child { margin-top: 0; }
+.md :last-child { margin-bottom: 0; }
+.md p { margin: 0.5em 0; }
+
+.muted {
+  color: var(--ink-soft);
+  font-size: 0.8rem;
+}
+
+@media (max-width: 520px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .card .card-body {
+    -webkit-line-clamp: 4;
+  }
+}
